@@ -129,59 +129,47 @@
       `;
       messages.appendChild(typingMsg);
       messages.scrollTop = messages.scrollHeight;
-
-      const botMsg = document.createElement('div');
+      
+      // Make API call to your chat endpoint
+      fetch('https://chat-bot-lemon-eight.vercel.app/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        typingMsg.remove();
+        
+        // Add bot response
+        const botMsg = document.createElement('div');
         botMsg.style.cssText = 'display: flex; justify-content: flex-start; margin-bottom: 16px;';
         botMsg.innerHTML = `
           <div style="max-width: 80%; background: #f3f4f6; color: #374151; padding: 12px 16px; border-radius: 12px; border-bottom-left-radius: 4px; font-size: 14px;">
-            <p style="margin: 0; line-height: 1.4;">${'Sorry, I am not able to answer that question.'}</p>
+            <p style="margin: 0; line-height: 1.4;">${data.message || 'Sorry, I am not able to answer that question.'}</p>
             <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.7;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
           </div>
         `;
         messages.appendChild(botMsg);
         messages.scrollTop = messages.scrollHeight;
-      
-      // Make API call to your chat endpoint
-      // fetch('https://chat-bot-lemon-eight.vercel.app/api/chat', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ message })
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //   typingMsg.remove();
-      //   console.log("data",data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        typingMsg.remove();
         
-      //   // Add bot response
-      //   const botMsg = document.createElement('div');
-      //   botMsg.style.cssText = 'display: flex; justify-content: flex-start; margin-bottom: 16px;';
-      //   botMsg.innerHTML = `
-      //     <div style="max-width: 80%; background: #f3f4f6; color: #374151; padding: 12px 16px; border-radius: 12px; border-bottom-left-radius: 4px; font-size: 14px;">
-      //       <p style="margin: 0; line-height: 1.4;">${data.message || 'Sorry, I am not able to answer that question.'}</p>
-      //       <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.7;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
-      //     </div>
-      //   `;
-      //   messages.appendChild(botMsg);
-      //   messages.scrollTop = messages.scrollHeight;
-      // })
-      // .catch(error => {
-      //   console.error('Error:', error);
-      //   typingMsg.remove();
-        
-      //   // Add error message
-      //   const errorMsg = document.createElement('div');
-      //   errorMsg.style.cssText = 'display: flex; justify-content: flex-start; margin-bottom: 16px;';
-      //   errorMsg.innerHTML = `
-      //     <div style="max-width: 80%; background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 12px; border-bottom-left-radius: 4px; font-size: 14px;">
-      //       <p style="margin: 0; line-height: 1.4;">Sorry, there was an error processing your message. Please try again.</p>
-      //       <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.7;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
-      //     </div>
-      //   `;
-      //   messages.appendChild(errorMsg);
-      //   messages.scrollTop = messages.scrollHeight;
-      // });
+        // Add error message
+        const errorMsg = document.createElement('div');
+        errorMsg.style.cssText = 'display: flex; justify-content: flex-start; margin-bottom: 16px;';
+        errorMsg.innerHTML = `
+          <div style="max-width: 80%; background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 12px; border-bottom-left-radius: 4px; font-size: 14px;">
+            <p style="margin: 0; line-height: 1.4;">Sorry, there was an error processing your message. Please try again.</p>
+            <p style="margin: 4px 0 0 0; font-size: 12px; opacity: 0.7;">${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
+          </div>
+        `;
+        messages.appendChild(errorMsg);
+        messages.scrollTop = messages.scrollHeight;
+      });
     }
     
     sendBtn.addEventListener('click', sendMessage);
