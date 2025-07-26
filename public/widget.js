@@ -36,7 +36,7 @@
 
     // Load chatbot bundle
     const chatbotScript = document.createElement('script');
-    chatbotScript.src = '/chatbot.bundle.js'; // Adjust to your deployed URL
+    chatbotScript.src = 'https://chat-bot-lemon-eight.vercel.app/chatbot.bundle.js'; // Adjust to your deployed URL
     chatbotScript.async = true;
     shadow.appendChild(chatbotScript);
   };
