@@ -1,5 +1,6 @@
 export interface Message {
-    id: number;
-    text: string;
-    isBot: boolean;
-  }
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+}
