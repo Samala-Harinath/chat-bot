@@ -1,4 +1,4 @@
-// public/widget.js
+// public/embed.js
 (function () {
   // Load React and ReactDOM from CDN
   const reactScript = document.createElement('script');
