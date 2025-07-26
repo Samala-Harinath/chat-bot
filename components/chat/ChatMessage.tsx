@@ -19,7 +19,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
           ? 'bg-gray-100 text-gray-800 rounded-bl-none' 
           : 'bg-blue-600 text-white rounded-br-none'
       )}>
-        <p className="whitespace-pre-wrap">{message.text}</p>
+        <p className="whitespace-pre-wrap">{message.text||'Sorry, I am not able to answer that question.'}</p>
         <p className={cn(
           'text-xs mt-1 opacity-70',
           isBot ? 'text-gray-500' : 'text-blue-100'
