@@ -63,7 +63,7 @@ export default function ChatPage() {
           <div className="space-y-4">
             <div>
               <h3 className="font-medium text-gray-800">Domain</h3>
-              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., 'https://api.yoursite.com')</p>
+              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., &apos;https://api.yoursite.com&apos;)</p>
             </div>
             <div>
               <h3 className="font-medium text-gray-800">API Key</h3>
@@ -75,7 +75,7 @@ export default function ChatPage() {
             </div>
             <div>
               <h3 className="font-medium text-gray-800">Speech Language</h3>
-              <p className="text-sm text-gray-600">Language code for speech recognition (e.g., 'en-US', 'es-ES')</p>
+              <p className="text-sm text-gray-600">Language code for speech recognition (e.g., &apos;en-US&apos;, &apos;es-ES&apos;)</p>
             </div>
           </div>
         </div>

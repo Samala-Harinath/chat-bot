@@ -25,7 +25,7 @@ export default function RootLayout({
     };
     `}
         </script>
-        <script src="/embed.js" />
+        <script src="/embed.js" async />
       </body>
     </html>
   );

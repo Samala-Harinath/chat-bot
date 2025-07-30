@@ -1,7 +1,42 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Minimize2 } from 'lucide-react';
+
+interface SpeechRecognitionEvent extends Event {
+  results: {
+    [key: number]: {
+      [key: number]: {
+        transcript: string;
+      };
+    };
+  };
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognitionInstance extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  onstart: () => void;
+  onend: () => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+}
+
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognitionInstance;
+}
+
+interface WindowWithSpeechRecognition extends Window {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+}
 
 interface Message {
   id: string;
@@ -40,11 +75,12 @@ export default function ChatBot({
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   // Speech Recognition Support
   const SpeechRecognition = typeof window !== 'undefined' ? 
-    (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : null;
+    ((window as unknown as WindowWithSpeechRecognition).SpeechRecognition || 
+     (window as unknown as WindowWithSpeechRecognition).webkitSpeechRecognition) : null;
   const speechSupported = SpeechRecognition && speechRecognition;
 
   // Update API URL based on domain
@@ -59,7 +95,7 @@ export default function ChatBot({
         timestamp: new Date()
       }]);
     }
-  }, [welcomeMessage]);
+  }, [welcomeMessage, messages.length]);
 
   useEffect(() => {
     scrollToBottom();
@@ -71,49 +107,7 @@ export default function ChatBot({
     }
   }, [isOpen, isMinimized]);
 
-  useEffect(() => {
-    if (speechSupported && !recognitionRef.current) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = speechLanguage;
-
-      recognition.onstart = () => setIsListening(true);
-      recognition.onend = () => setIsListening(false);
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInputMessage(transcript);
-        // Auto-send after speech recognition
-        setTimeout(() => {
-          if (transcript.trim()) {
-            handleSendMessage(transcript.trim());
-          }
-        }, 100);
-      };
-      recognition.onerror = (event: any) => {
-        console.error('Speech recognition error:', event.error);
-        setIsListening(false);
-      };
-
-      recognitionRef.current = recognition;
-    }
-  }, [speechSupported, speechLanguage]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const toggleSpeechRecognition = () => {
-    if (!speechSupported || !recognitionRef.current) return;
-
-    if (isListening) {
-      recognitionRef.current.stop();
-    } else {
-      recognitionRef.current.start();
-    }
-  };
-
-  const handleSendMessage = async (messageText?: string) => {
+  const handleSendMessage = useCallback(async (messageText?: string) => {
     const text = messageText || inputMessage.trim();
     if (!text || isLoading) return;
 
@@ -176,6 +170,48 @@ export default function ChatBot({
       setMessages(prev => [...prev, errorMessage]);
       setIsTyping(false);
       setIsLoading(false);
+    }
+  }, [inputMessage, isLoading, finalApiUrl, apiKey, setMessages, setInputMessage, setIsLoading, setIsTyping]);
+
+  useEffect(() => {
+    if (speechSupported && !recognitionRef.current) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = speechLanguage;
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(transcript);
+        // Auto-send after speech recognition
+        setTimeout(() => {
+          if (transcript.trim()) {
+            handleSendMessage(transcript.trim());
+          }
+        }, 100);
+      };
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, [speechSupported, speechLanguage, SpeechRecognition, handleSendMessage]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const toggleSpeechRecognition = () => {
+    if (!speechSupported || !recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      recognitionRef.current.start();
     }
   };
 

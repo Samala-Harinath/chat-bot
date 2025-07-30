@@ -100,7 +100,7 @@ export default function Home() {
                   </div>
                   <div>
                     <strong>position:</strong>
-                    <p className="text-sm text-gray-600">'bottom-right', 'bottom-left', 'top-right', 'top-left'</p>
+                    <p className="text-sm text-gray-600">&apos;bottom-right&apos;, &apos;bottom-left&apos;, &apos;top-right&apos;, &apos;top-left&apos;</p>
                   </div>
                 </div>
                 <div className="space-y-3">
