@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>{children}
-        <script>
+        {/* <script>
           {`
   window.chatbotConfig = {
     domain: 'https://api.llamaworx.com/',
@@ -25,7 +25,7 @@ export default function RootLayout({
     };
     `}
         </script>
-        <script src="/embed.js" async />
+        <script src="/embed.js" async /> */}
       </body>
     </html>
   );

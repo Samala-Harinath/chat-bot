@@ -7,7 +7,7 @@ export default function ChatPage() {
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Chatbot Demo</h1>
-        
+
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Embed Code</h2>
           <p className="text-gray-600 mb-4">
@@ -15,7 +15,7 @@ export default function ChatPage() {
           </p>
           <div className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
             <code className="text-sm text-gray-800">
-              {`<script src="${typeof window !== 'undefined' ? window.location.origin : 'https://your-domain.com'}/embed.js" async></script>`}
+              {`<script src="${typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
             </code>
           </div>
         </div>
@@ -42,9 +42,9 @@ export default function ChatPage() {
           <h2 className="text-xl font-semibold mb-4">Example Usage</h2>
           <div className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
             <code className="text-sm text-gray-800 whitespace-pre">
-{`<script>
+              {`<script>
   window.chatbotConfig = {
-    domain: 'https://your-api-domain.com',
+    domain: '${process.env.NEXT_PUBLIC_BASE_URL}',
     apiKey: 'your-api-key-here',
     primaryColor: '#10B981',
     position: 'bottom-left',
@@ -53,7 +53,7 @@ export default function ChatPage() {
     speechLanguage: 'en-US'
   };
 </script>
-<script src="${typeof window !== 'undefined' ? window.location.origin : 'https://your-domain.com'}/embed.js" async></script>`}
+<script src="${typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
             </code>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function ChatPage() {
           <div className="space-y-4">
             <div>
               <h3 className="font-medium text-gray-800">Domain</h3>
-              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., &apos;https://api.yoursite.com&apos;)</p>
+              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., &apos;{process.env.NEXT_PUBLIC_BASE_URL}&apos;)</p>
             </div>
             <div>
               <h3 className="font-medium text-gray-800">API Key</h3>
@@ -81,7 +81,7 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <ChatBot 
+      <ChatBot
         speechRecognition={true}
         speechLanguage="en-US"
       />
