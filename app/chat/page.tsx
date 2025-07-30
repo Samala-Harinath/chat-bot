@@ -15,7 +15,7 @@ export default function ChatPage() {
           </p>
           <div className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
             <code className="text-sm text-gray-800">
-              {`<script src="${typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
+              {`<script src="${typeof window !== 'undefined' && window.location ? window.location.origin : ''}/embed.js" async></script>`}
             </code>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function ChatPage() {
             <code className="text-sm text-gray-800 whitespace-pre">
               {`<script>
   window.chatbotConfig = {
-    domain: '${process.env.NEXT_PUBLIC_BASE_URL}',
+    domain: '${window.location.origin}',
     apiKey: 'your-api-key-here',
     primaryColor: '#10B981',
     position: 'bottom-left',
@@ -53,7 +53,7 @@ export default function ChatPage() {
     speechLanguage: 'en-US'
   };
 </script>
-<script src="${typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
+<script src="${typeof window !== 'undefined' && window.location ? window.location.origin : ''}/embed.js" async></script>`}
             </code>
           </div>
         </div>
@@ -63,7 +63,7 @@ export default function ChatPage() {
           <div className="space-y-4">
             <div>
               <h3 className="font-medium text-gray-800">Domain</h3>
-              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., &apos;{process.env.NEXT_PUBLIC_BASE_URL}&apos;)</p>
+              <p className="text-sm text-gray-600">Custom domain for API calls (e.g., &apos;{window.location.origin}&apos;)</p>
             </div>
             <div>
               <h3 className="font-medium text-gray-800">API Key</h3>

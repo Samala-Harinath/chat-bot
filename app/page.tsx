@@ -64,7 +64,7 @@ export default function Home() {
               <p className="text-gray-600 mb-4">Add this single line to your website:</p>
               <div className="bg-gray-100 p-4 rounded-lg overflow-x-auto">
                 <code className="text-sm text-gray-800">
-                  {`<script src="${process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
+                  {`<script src="${window.location.origin}/embed.js" async></script>`}
                 </code>
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function Home() {
                 <code className="text-sm text-gray-800 whitespace-pre">
                 {`<script>
   window.chatbotConfig = {
-    domain: '${process.env.NEXT_PUBLIC_BASE_URL}',
+    domain: '${window.location.origin}',
     apiKey: 'your-api-key-here',
     primaryColor: '#10B981',
     position: 'bottom-left',
@@ -85,7 +85,7 @@ export default function Home() {
     speechLanguage: 'en-US'
   };
 </script>
-<script src="${process.env.NEXT_PUBLIC_BASE_URL}/embed.js" async></script>`}
+<script src="${window.location.origin}/embed.js" async></script>`}
                 </code>
               </div>
             </div>
